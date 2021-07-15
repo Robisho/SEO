@@ -11,7 +11,8 @@ from bs4 import BeautifulSoup
 from time import sleep
 import csv
 
-keyword = ''  
+# keyword = ''
+keyword = 'Московкин Леонид'
 # keyword = 'КРЕМНЁВ ЕВГЕНИЙ ВЛАДИМИРОВИЧ'  # 107
 
 def init_driver():  # инициализация экземпляра драйвера
