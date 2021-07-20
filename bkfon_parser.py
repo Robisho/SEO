@@ -67,5 +67,5 @@ def select_game(game_select_url, gamer_name):
 
 
 if __name__ == '__main__':
-    print(get_soccer_games(source_url))
+    get_soccer_games(source_url)
     select_game(game_select_url, gamer_name)
