@@ -16,6 +16,7 @@ selenium
 '''
 
 import hashlib
+import random
 import requests
 import time
 import requests_random_user_agent
@@ -23,8 +24,7 @@ from selenium import webdriver
 
 
 source_url = 'https://line11.bkfon-resources.com/live/currentLine/ru'
-game_select_url = 'https://www.fonbet.ru/sports/football/12764'
-gamer_name = 'Динамо Загреб — Омония Никосия'
+game_select_url = 'https://www.fonbet.ru/live'
 
 
 def get_soccer_games(source_url):
@@ -33,31 +33,40 @@ def get_soccer_games(source_url):
         response = session.get(source_url, headers=headers)
         if response.status_code != 200:
             print('Неудачное соединение', f'{response.status_code}')
-
         else:
             content = response.json()
-            main_list = content['announcements']
+            main_list = content['events']
             soccer_games = {}
 
             for item in main_list:
-                if item['sportName'] == 'Футбол':
-                    gamer_name = f"{item['team1']} — {item.setdefault('team2', [])}"
+                if item['team1Id']:
+                    gamer_name = f"{item['team1']} — {item['team2']}"
                     hash_obj = hashlib.md5(gamer_name.encode())
                     id = hash_obj.hexdigest()
                     soccer_games[id] = gamer_name
 
-        with open('soccer_games.txt', 'w') as file:
-            for key, val in soccer_games.items():
-                file.write(f'{key}: {val}\n')
+            return(soccer_games)
 
 
-def select_game(game_select_url, gamer_name):
+def get_gamer_name():
+    '''
+    выбор рандомной игры
+    '''
+    soccer_games = get_soccer_games(source_url)
+    id, gamer_name = random.choice(list(soccer_games.items()))
+    return gamer_name
+
+
+def select_game(game_select_url):
+    gamer_name = get_gamer_name()
     driver = webdriver.Chrome()
     driver.get(game_select_url)
     time.sleep(5)
     try:
-        link = driver.find_element_by_link_text(gamer_name)
-        link.click()
+        search = driver.find_element_by_xpath("//div[@class='search']/a").click()
+        input_text = driver.find_element_by_xpath("//div[@id='search-component']/input").send_keys(f'{gamer_name}')
+        time.sleep(2)
+        link = driver.find_element_by_xpath('//a[contains(@class, "search-result__event-name")]').click()
         print(gamer_name)
     except:
         print('Элемент не найден')
@@ -67,5 +76,4 @@ def select_game(game_select_url, gamer_name):
 
 
 if __name__ == '__main__':
-    get_soccer_games(source_url)
-    select_game(game_select_url, gamer_name)
+    select_game(game_select_url)
