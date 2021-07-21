@@ -35,11 +35,21 @@ def get_soccer_games(source_url):
             print('Неудачное соединение', f'{response.status_code}')
         else:
             content = response.json()
+
+            sports_list = content['sports']
+            id_list = []
+
+            soccer_id = 1
+            for sport in sports_list:
+                if sport.get('parentId'):
+                    if sport['parentId'] == soccer_id:
+                        id_list.append(sport['id'])
+
             main_list = content['events']
             soccer_games = {}
 
             for item in main_list:
-                if item['team1Id']:
+                if item['team1Id'] and item['sportId'] in id_list:
                     gamer_name = f"{item['team1']} — {item['team2']}"
                     hash_obj = hashlib.md5(gamer_name.encode())
                     id = hash_obj.hexdigest()
