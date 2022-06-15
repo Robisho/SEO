@@ -21,4 +21,4 @@ leroymerlin_parser_async.py - асинхронный парсер сайта ler
 
 async_pbusiness.py - асинхронный парсер сайта p-business.ru
 
-google_by_keywords.py - парсер выдачи google по списку ключей
+google_by_keywords.py - парсер статей из выдачи google по списку ключей
