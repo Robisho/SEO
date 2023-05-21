@@ -1,4 +1,6 @@
-# seo
+# SEO
+
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 
 Python 3.8.3<br>
 asyncio==3.4.3<br>
